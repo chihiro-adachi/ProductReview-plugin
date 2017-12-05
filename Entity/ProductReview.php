@@ -18,6 +18,8 @@ use Eccube\Entity\Product;
 
 /**
  * Class ProductReview Entity.
+ *
+ * TODO アノテーション定義に変更
  */
 class ProductReview extends AbstractEntity
 {

@@ -12,7 +12,11 @@ namespace Plugin\ProductReview\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
 use Eccube\Application;
-use Eccube\Controller\AbstractController;
+use Plugin\ProductReview\Form\Type\Admin\ProductReviewConfigType;
+use Plugin\ProductReview\Repository\ProductReviewConfigRepository;
+use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,41 +27,55 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class ConfigController extends AbstractController
 {
+    private $reviewConfigRepository;
+
+    private $logger;
+
+    public function __construct(
+        ProductReviewConfigRepository $productReviewConfigRepository,
+        LoggerInterface $logger
+    ) {
+        $this->reviewConfigRepository = $productReviewConfigRepository;
+        $this->logger = $logger;
+    }
+
     /**
      * @param Application $app
      * @param Request     $request
      *
      * @return Response
+     *
+     * @Route("/{_admin}/plugin/product/review/config", name="plugin_ProductReview_config")
      */
-    public function index(Application $app, Request $request)
+    public function index(Request $request)
     {
-        $config = $app['product_review.repository.product_review_config']->find(1);
+        $config = $this->reviewConfigRepository->find(1);
         if (!$config) {
             throw new NotFoundHttpException();
         }
 
         /* @var $form FormInterface */
-        $form = $app['form.factory']
-            ->createBuilder('admin_product_review_config', $config)
+        $form = $this
+            ->createFormBuilder(ProductReviewConfigType::class, $config)
             ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 /* @var $em EntityManager */
-                $em = $app['orm.em'];
+                $em = $this->getDoctrine()->getManager();
                 $em->persist($config);
                 $em->flush($config);
 
-                log_info('Product review config', array('status' => 'Success'));
+                $this->logger->info('Product review config', array('status' => 'Success'));
 
-                $app->addSuccess('plugin.admin.product_review_config.save.complete', 'admin');
+                $this->addFlash('success', 'plugin.admin.product_review_config.save.complete');
             } catch (\Exception $e) {
-                log_info('Product review config', array('status' => $e->getMessage()));
+                $this->logger->info('Product review config', array('status' => $e->getMessage()));
 
-                $app->addError('plugin.admin.product_review_config.save.error', 'admin');
+                $this->addFlash('error', 'plugin.admin.product_review_config.save.error');
             }
         }
 
-        return $app->render('ProductReview/Resource/template/admin/config.twig', array('form' => $form->createView()));
+        return $this->render('ProductReview/Resource/template/admin/config.twig', array('form' => $form->createView()));
     }
 }

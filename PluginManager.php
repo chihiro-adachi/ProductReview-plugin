@@ -15,6 +15,8 @@ use Eccube\Plugin\AbstractPluginManager;
 
 /**
  * Class PluginManager.
+ *
+ * TODO インストーラの仕組みは別途検討
  */
 class PluginManager extends AbstractPluginManager
 {

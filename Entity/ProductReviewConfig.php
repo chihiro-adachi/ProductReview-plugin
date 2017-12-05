@@ -15,6 +15,8 @@ use Eccube\Entity\Master\CsvType;
 
 /**
  * Class ProductReviewConfig Entity.
+ *
+ * TODO アノテーション定義に変更
  */
 class ProductReviewConfig extends AbstractEntity
 {

@@ -20,6 +20,7 @@ use Symfony\Component\DomCrawler\Crawler;
  * Class ProductReviewEventLegacy.
  *
  * @deprecated since 3.0.0 - 3.0.8
+ * @deprecated EventSubscriberに移行
  */
 class ProductReviewEventLegacy extends CommonEvent
 {

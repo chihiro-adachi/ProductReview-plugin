@@ -14,6 +14,8 @@ use Eccube\Application;
 
 /**
  * Class AbstractEvent.
+ *
+ * @deprecated EventSubscriberに移行
  */
 class CommonEvent
 {

@@ -19,21 +19,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class ProductReviewType
  * [商品レビュー]-[レビューフロント]用Form.
  */
-class ProductReviewType extends AbstractType
+class ProductReviewType extends AbstractType // TODO EccubeAbstractTypeに変更
 {
     /**
-     * @var Application
+     * @var array
      */
-    private $app;
+    private $appConfig;
 
     /**
      * ProductReviewType constructor.
      *
-     * @param object $app
+     * @param array $app
      */
-    public function __construct($app)
+    public function __construct($appConfig) // TODO service.ymlでbindする
     {
-        $this->app = $app;
+        $this->appConfig = $appConfig;
     }
 
     /**
@@ -44,7 +44,7 @@ class ProductReviewType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $config = $this->app['config'];
+        $config = $this->appConfig;
         $builder
             ->add('reviewer_name', 'text', array(
                 'label' => '投稿者名',
@@ -114,6 +114,7 @@ class ProductReviewType extends AbstractType
      */
     public function getName()
     {
+        // getNameは削除
         return 'product_review';
     }
 }

@@ -18,6 +18,8 @@ use Plugin\ProductReview\Repository\ProductReviewRepository;
 
 /**
  * Class Event.
+ *
+ * @deprecated EventSubscriberに移行
  */
 class ProductReviewEvent extends CommonEvent
 {
