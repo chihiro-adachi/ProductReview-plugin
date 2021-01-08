@@ -59,6 +59,7 @@ class ProductReviewController extends AbstractController
 
     /**
      * @Route("/product_review/{id}/review", name="product_review_index", requirements={"id" = "\d+"})
+     * @Route("/product_review/{id}/review", name="product_review_confirm", requirements={"id" = "\d+"})
      *
      * @param Request $request
      * @param Product $Product
@@ -138,5 +139,16 @@ class ProductReviewController extends AbstractController
     public function complete($id)
     {
         return ['id' => $id];
+    }
+
+    /**
+     * ページ管理での表示用ルーティング
+     *
+     * @Route("/product_review/display", name="product_review_display")
+     * @Template("@ProductReview4/default/review.twig")
+     */
+    public function display()
+    {
+        return [];
     }
 }
